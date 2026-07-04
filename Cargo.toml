@@ -1,0 +1,19 @@
+[package]
+name = "asolaria-hbi-hbp"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.63"
+license = "MIT OR Apache-2.0"
+authors = ["Asolaria Federation"]
+description = "Asolaria HBI/HBP bridge codec — the canonical machine-to-machine wire format: Rust, json=0, sha256 content-addressing (AGT-<sha16>), byte-offset index pointers, hash-chained receipts. Zero external crates."
+repository = "https://github.com/JesseBrown1980/asolaria-hbi-hbp"
+
+[lib]
+name = "asolaria_hbi_hbp"
+path = "src/lib.rs"
+
+# ZERO external dependencies — pure std + a pure-Rust sha256. Builds on any toolchain.
+
+[profile.release]
+opt-level = 3
+lto = true
