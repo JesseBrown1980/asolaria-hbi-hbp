@@ -25,7 +25,8 @@ const K: [u32; 64] = [
 /// Raw sha256 digest of `data`.
 pub fn sha256(data: &[u8]) -> [u8; 32] {
     let mut h: [u32; 8] = [
-        0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19,
+        0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab,
+        0x5be0cd19,
     ];
     let bit_len = (data.len() as u64).wrapping_mul(8);
     let mut msg = data.to_vec();
@@ -38,7 +39,12 @@ pub fn sha256(data: &[u8]) -> [u8; 32] {
     for chunk in msg.chunks(64) {
         let mut w = [0u32; 64];
         for i in 0..16 {
-            w[i] = u32::from_be_bytes([chunk[i * 4], chunk[i * 4 + 1], chunk[i * 4 + 2], chunk[i * 4 + 3]]);
+            w[i] = u32::from_be_bytes([
+                chunk[i * 4],
+                chunk[i * 4 + 1],
+                chunk[i * 4 + 2],
+                chunk[i * 4 + 3],
+            ]);
         }
         for i in 16..64 {
             let s0 = w[i - 15].rotate_right(7) ^ w[i - 15].rotate_right(18) ^ (w[i - 15] >> 3);
@@ -109,7 +115,9 @@ pub fn agt(content: &[u8]) -> String {
 // ---------------------------------------------------------------------------
 
 fn esc(v: &str) -> String {
-    v.replace('\\', "\\\\").replace('|', "\\p").replace('\n', "\\n")
+    v.replace('\\', "\\\\")
+        .replace('|', "\\p")
+        .replace('\n', "\\n")
 }
 fn unesc(v: &str) -> String {
     let mut out = String::with_capacity(v.len());
@@ -219,7 +227,9 @@ impl Default for ReceiptChain {
 }
 impl ReceiptChain {
     pub fn new() -> Self {
-        Self { prev: GENESIS.to_string() }
+        Self {
+            prev: GENESIS.to_string(),
+        }
     }
     /// Seal `row` into a receipt: appends prev_event_hash + event_hash. Returns the receipt row.
     pub fn append(&mut self, row: &str) -> String {
@@ -240,7 +250,9 @@ pub fn verify_chain(receipts: &[String]) -> bool {
     let mut prev = GENESIS.to_string();
     for r in receipts {
         let marker = "|event_hash=";
-        let Some(pos) = r.rfind(marker) else { return false };
+        let Some(pos) = r.rfind(marker) else {
+            return false;
+        };
         let body = &r[..pos];
         let claimed = &r[pos + marker.len()..];
         if sha256_hex(body.as_bytes()) != claimed {
@@ -248,7 +260,9 @@ pub fn verify_chain(receipts: &[String]) -> bool {
         }
         // the body must carry the correct prev
         let pm = "|prev_event_hash=";
-        let Some(pp) = body.rfind(pm) else { return false };
+        let Some(pp) = body.rfind(pm) else {
+            return false;
+        };
         if &body[pp + pm.len()..] != prev {
             return false;
         }
