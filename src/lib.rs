@@ -263,7 +263,7 @@ pub fn verify_chain(receipts: &[String]) -> bool {
         let Some(pp) = body.rfind(pm) else {
             return false;
         };
-        if &body[pp + pm.len()..] != prev {
+        if body[pp + pm.len()..] != prev {
             return false;
         }
         prev = claimed.to_string();
