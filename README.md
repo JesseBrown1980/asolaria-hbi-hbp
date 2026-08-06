@@ -1,5 +1,17 @@
 # asolaria-hbi-hbp
 
+## Toolchain rule (operator, global — no exceptions)
+
+**Rust 1.81 with clippy. Integer arithmetic and ternary (trits) only — never float.**
+
+Pinned in `rust-toolchain.toml` (`channel = "1.81.0"`, `components = ["clippy", "rustfmt"]`),
+declared as `rust-version = "1.81"` in every `Cargo.toml`, and enforced in CI by
+`cargo clippy --all-targets -- -D warnings` plus a hard grep that fails the build on any
+`f32`/`f64` in `src/` or `tests/`.
+
+Any receipt in this repository naming a toolchain other than 1.81 records a run made outside
+the rule. It is retained as history, not as the toolchain of record.
+
 **The canonical HBI/HBP bridge — the machine-to-machine wire format for the Asolaria fabric and its colonies.**
 
 This is the *hot path*. Two machines (e.g. an Asolaria node and a Simplicio node) talk to each other in **HBP tuple rows**, `json=0`, content-addressed by **sha256**, with **hash-chained receipts** — no JSON, no Node, no serialization framework in the loop. Pure Rust, **zero external crates** (pure `std` + a pure-Rust sha256), so it builds on any toolchain.
