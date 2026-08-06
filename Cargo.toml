@@ -2,7 +2,7 @@
 name = "asolaria-hbi-hbp"
 version = "0.1.0"
 edition = "2021"
-rust-version = "1.63"
+rust-version = "1.81"
 license = "MIT OR Apache-2.0"
 authors = ["Asolaria Federation"]
 description = "Asolaria HBI/HBP bridge codec — the canonical machine-to-machine wire format: Rust, json=0, sha256 content-addressing (AGT-<sha16>), byte-offset index pointers, hash-chained receipts. Zero external crates."
